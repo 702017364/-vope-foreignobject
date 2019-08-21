@@ -19,7 +19,7 @@ const compileScss = () => gulp
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
-  // .pipe(clean())
+  .pipe(clean())
   .pipe(gulp.dest('styles'));
 
 const compileECMAbin = getCompileECMA('src/index.js', 'bin');
