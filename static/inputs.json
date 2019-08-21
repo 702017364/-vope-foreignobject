@@ -1,0 +1,115 @@
+[
+  {
+    "type": "button",
+    "value": "button"
+  },
+  {
+    "type": "checkbox",
+    "name": "checkbox",
+    "checked": true
+  },
+  {
+    "type": "checkbox",
+    "name": "checkbox",
+    "checked": false
+  },
+  {
+    "type": "checkbox",
+    "name": "checkbox",
+    "indeterminate": true
+  },
+  {
+    "type": "date",
+    "value": {
+      "value": "new Date()",
+      "format": "yyyy-mm-dd"
+    }
+  },
+  {
+    "type": "datetime-local",
+    "value": {
+      "value": "new Date()",
+      "format": "yyyy-mm-ddTHH:MM"
+    }
+  },
+  {
+    "type": "email",
+    "value": "u@domain.tld"
+  },
+  {
+    "type": "file",
+    "value": "123.gif"
+  },
+  {
+    "type": "hidden"
+  },
+  {
+    "type": "image",
+    "src": "node_modules/@vope/scss/images/img3.jpg"
+  },
+  {
+    "type": "month",
+    "value": {
+      "value": "new Date()",
+      "format": "yyyy-mm"
+    }
+  },
+  {
+    "type": "number",
+    "value": 5
+  },
+  {
+    "type": "password",
+    "value": "123456"
+  },
+  {
+    "type": "radio",
+    "name": "radio",
+    "checked": false
+  },
+  {
+    "type": "radio",
+    "name": "radio",
+    "checked": true
+  },
+  {
+    "type": "range",
+    "value": 80
+  },
+  {
+    "type": "reset"
+  },
+  {
+    "type": "search",
+    "value": "abc"
+  },
+  {
+    "type": "submit"
+  },
+  {
+    "type": "tel",
+    "value": "18212345678"
+  },
+  {
+    "type": "text",
+    "value": "text"
+  },
+  {
+    "type": "time",
+    "value": {
+      "value": "new Date()",
+      "format": "HH:MM"
+    }
+  },
+  {
+    "type": "url",
+    "value": "https://www.baidu.com"
+  },
+  {
+    "type": "week",
+    "value": {
+      "value": "new Date()",
+      "format": "yyyy-W20"
+    }
+  }
+]

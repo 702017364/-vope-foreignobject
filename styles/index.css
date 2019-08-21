@@ -1,0 +1,1553 @@
+@charset "UTF-8";
+.for-style::after {
+  width: 100%;
+  content: '';
+  display: table;
+  clear: both;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 500;
+}
+
+::-webkit-input-placeholder {
+  color: #ddd;
+}
+
+::-moz-placeholder {
+  color: #ddd;
+  opacity: 1 !important;
+}
+
+:-ms-input-placeholder {
+  color: #ddd;
+}
+
+html {
+  font: 100% "Microsoft YaHei";
+  height: 100%;
+  overflow: auto;
+  color: #333;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+}
+
+dl, ol, ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+dd {
+  margin-left: 0;
+}
+
+h1 {
+  font-size: 1.375rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+h5 {
+  font-size: 0.875rem;
+}
+
+h6 {
+  font-size: 0.75rem;
+}
+
+p {
+  margin: 0;
+}
+
+iframe, img, fieldset {
+  border-width: 0;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+td, th {
+  padding: 0;
+}
+
+i, em {
+  font-style: normal;
+}
+
+hr {
+  margin: 1em 0;
+  border-width: 1px solid;
+  color: inherit;
+}
+
+a:focus, input:focus, button:focus, select:focus, textarea:focus, [tab-index]:focus {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+main {
+  display: block;
+}
+
+input, button, textarea {
+  font: inherit;
+}
+
+textarea {
+  resize: none;
+}
+
+.test-box, .mixin-quick, .function-calc, .libsass3-5-0::after, .scroll-translate {
+  margin: var(--div-box);
+  padding: var(--div-box);
+  border-radius: var(--div-box);
+  box-shadow: 0 0 var(--div-box);
+  box-sizing: border-box;
+}
+
+.test-center {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:root {
+  --div-box: .5em;
+  --grid-col: 12;
+}
+
+.test-list {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.test-box {
+  --grid-span: 12;
+  width: calc(var(--grid-span) / 12 * 100% + var(--div-box) * -2);
+}
+
+.test-box[span='1'] {
+  --grid-span: 1;
+}
+
+.test-box[span='2'] {
+  --grid-span: 2;
+}
+
+.test-box[span='3'] {
+  --grid-span: 3;
+}
+
+.test-box[span='4'] {
+  --grid-span: 4;
+}
+
+.test-box[span='5'] {
+  --grid-span: 5;
+}
+
+.test-box[span='6'] {
+  --grid-span: 6;
+}
+
+.test-box[span='7'] {
+  --grid-span: 7;
+}
+
+.test-box[span='8'] {
+  --grid-span: 8;
+}
+
+.test-box[span='9'] {
+  --grid-span: 9;
+}
+
+.test-box[span='10'] {
+  --grid-span: 10;
+}
+
+.test-box[span='11'] {
+  --grid-span: 11;
+}
+
+@media (max-width: 1024px) {
+  .test-box {
+    min-width: 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .test-box {
+    width: 100%;
+    overflow: hidden;
+  }
+}
+
+@font-face {
+  font-family: element-ui;
+  src: url(../node_modules/@vope/scss/images/element-icons.woff) format("woff");
+}
+
+@font-face {
+  font-family: cube-ui;
+  src: url(../node_modules/@vope/scss/images/cubeic.dcc2b6f.ttf) format("truetype");
+}
+
+.api-directory {
+  padding-left: calc(var(--div-box) / -2);
+  font-size: 0.875rem;
+  line-height: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.api-directory > dt {
+  width: 100%;
+  margin: 0 0 calc(var(--div-box) * -0.6) var(--div-box);
+  font-size: 1.2em;
+  line-height: 1.7;
+}
+
+.api-directory > dd {
+  margin: calc(var(--div-box) * 0.6) 0 0 var(--div-box);
+  padding: .6em .4em;
+  border-radius: .8em;
+  transition: .3s box-shadow;
+  cursor: pointer;
+}
+
+.api-directory > dd.active, .api-directory > dd:hover {
+  box-shadow: inset 0 0 4px;
+}
+
+.api-directory::after {
+  margin-top: 1em;
+  height: 6em;
+  line-height: 1.6em;
+  font-family: element-ui, cube-ui;
+  content: 'foreignObject多图及多字体测试\a（\e7ca\e67d）';
+  white-space: pre;
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: url(../node_modules/@vope/scss/images/img2.jpeg) 0 0/20% 100% no-repeat, linear-gradient(#900 20%, transparent 0, transparent 80%, #090 0) 50% 0/60% 100% no-repeat, url(../node_modules/@vope/scss/images/img5.png) 100% 0/20% 100% no-repeat, #ccc;
+}
+
+.api-frame {
+  width: 100%;
+  height: 100%;
+  display: block;
+  resize: vertical;
+}
+
+.ui-list {
+  font-size: 0.875rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.ui-list > span {
+  display: none;
+}
+
+.ui-list ul {
+  margin: .8em;
+}
+
+.ui-list li {
+  line-height: 2;
+  text-indent: 0.5em;
+}
+
+.ui-list li:not(:first-child) {
+  margin-top: .5em;
+}
+
+.ui-list-left > li {
+  padding-left: 0.3em;
+  color: #fff;
+  background: linear-gradient(90deg, #000 0.3em, #5573e0 0);
+}
+
+.ui-list-rect > li {
+  text-indent: 0;
+  display: flex;
+  counter-increment: count;
+  background-color: #e0d831;
+}
+
+.ui-list-rect > li::before {
+  width: 2.6em;
+  content: counter(count);
+  transform: rotate(-30deg);
+  transform-origin: 20% 100%;
+  text-align: center;
+  color: #fff;
+  background-color: #35d9cc;
+}
+
+.ui-list-both > li {
+  padding: 0 0.3em;
+  color: #fff;
+  background: linear-gradient(90deg, #000 0.3em, #5573e0 0, #5573e0 calc(100% - 0.3em), #000 0);
+}
+
+.ui-list-square > li {
+  text-indent: 0;
+  display: flex;
+  counter-increment: count;
+  background: linear-gradient(90deg, #ff6a69 2em, transparent 0, transparent 2.3em, #ff6a69 0);
+}
+
+.ui-list-square > li::before {
+  width: 2em;
+  margin-right: 0.8em;
+  content: counter(count);
+  text-align: center;
+  color: #fff;
+}
+
+.ui-list-circle > li {
+  border-radius: 0 1em 1em 0;
+  text-indent: 0;
+  display: flex;
+  counter-increment: count;
+  background: radial-gradient(1.2em at 0 50%, transparent 1.2em, #85ca6a calc(1.2em + 1px)) 1em 0/100% 100% no-repeat;
+}
+
+.ui-list-circle > li::before {
+  width: 2em;
+  margin-right: 0.7em;
+  border-radius: 50%;
+  content: counter(count);
+  text-align: center;
+  color: #fff;
+  background-color: #85ca6a;
+}
+
+.ui-list-nameplate > li {
+  border-radius: .2em;
+  text-indent: 1.5em;
+  clip-path: polygon(0 50%, 0.8em 0, 100% 0, 100% 100%, 0.8em 100%);
+  color: #fff;
+  background: radial-gradient(0.2em at 0.8em 50%, transparent 0.2em, #0089e7 calc(0.2em + 1px));
+}
+
+.ui-nth {
+  padding-top: 1px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ui-nth > li {
+  width: 5%;
+  margin-top: -1px;
+  box-shadow: inset 0 0 0 1px;
+  box-sizing: border-box;
+  counter-increment: count;
+}
+
+.ui-nth > li::after {
+  content: counter(count);
+}
+
+.ui-nth > :nth-last-child(1):first-child, .ui-nth > :nth-last-child(1):first-child ~ li {
+  width: 100%;
+}
+
+.ui-nth > :nth-last-child(2):first-child, .ui-nth > :nth-last-child(2):first-child ~ li {
+  width: 50%;
+}
+
+.ui-nth > :nth-last-child(3):first-child, .ui-nth > :nth-last-child(3):first-child ~ li {
+  width: calc(100% / 3);
+}
+
+.ui-nth > :nth-last-child(4):first-child, .ui-nth > :nth-last-child(4):first-child ~ li {
+  width: 25%;
+}
+
+.ui-nth > :nth-last-child(5):first-child, .ui-nth > :nth-last-child(5):first-child ~ li {
+  width: 20%;
+}
+
+.ui-nth > :nth-child(-n + 5) {
+  width: 20%;
+}
+
+.ui-nth > :nth-child(n + 6):nth-child(-n + 15) {
+  width: 10%;
+}
+
+input {
+  color: #f00;
+}
+
+.ui-concave {
+  margin: -10px 0 0 -10px;
+  display: flex;
+  flex-wrap: wrap;
+  color: #999;
+}
+
+.ui-concave > div {
+  width: 200px;
+  height: 100px;
+  margin: 10px 0 0 10px;
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 0 5px);
+}
+
+.ui-concave > div::after {
+  color: #333;
+}
+
+.ui-concave-shadow {
+  position: relative;
+  overflow: hidden;
+}
+
+.ui-concave-shadow::before {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  content: '';
+  box-shadow: 0 0 0 100vmax currentColor, inset 0 0 0 1px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ui-concave-shadow::after {
+  position: relative;
+  content: '使用 box-shadow 实现的凹角';
+}
+
+.ui-concave-bgimage {
+  background: radial-gradient(50% 50% at 0% 0%, transparent 100%, currentColor calc(100% + 1px)) 0 0, radial-gradient(50% 50% at 100% 0%, transparent 100%, currentColor calc(100% + 1px)) 100% 0, radial-gradient(50% 50% at 0% 100%, transparent 100%, currentColor calc(100% + 1px)) 0 100%, radial-gradient(50% 50% at 100% 100%, transparent 100%, currentColor calc(100% + 1px)) 100% 100%;
+  background-size: calc(50% + 1px) calc(50% + 1px);
+  background-repeat: no-repeat;
+}
+
+.ui-concave-bgimage::after {
+  content: '使用 radial-gradient 实现的凹角';
+}
+
+.ui-concave-svg {
+  background: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='200' height='100' viewBox='0 0 200 100'%3E%3Cpath fill='%23999' d='M 150 0 A 50, 25 0 0, 0 200, 25 V 75 A 50, 25 0 0, 0 150, 100 H 50 A 50, 25 0 0, 0 0, 75 V 25 A 50, 25 0 0, 0 50, 0 Z'/%3E%3C/svg%3E");
+}
+
+.ui-concave-svg::after {
+  content: '使用 SVG 实现的凹角';
+}
+
+.ui-keyframes-var {
+  --s: 0;
+  --value: calc(var(--s) * 3.6deg);
+  width: 200px;
+  height: 200px;
+  animation: u6513fdb5 5s linear infinite;
+  border-radius: 50%;
+  background-size: 10% 10%;
+  background-image: linear-gradient(calc(var(--value) - 135deg), currentColor 25%, transparent calc(25% + 1px)), linear-gradient(calc(var(--value) - 45deg), currentColor 25%, transparent calc(25% + 1px)), linear-gradient(calc(var(--value) + 45deg), currentColor 25%, transparent calc(25% + 1px)), linear-gradient(calc(var(--value) + 135deg), currentColor 25%, transparent calc(25% + 1px));
+}
+
+@keyframes u6513fdb5 {
+  1% {
+    --s: 1;
+  }
+  2% {
+    --s: 2;
+  }
+  3% {
+    --s: 3;
+  }
+  4% {
+    --s: 4;
+  }
+  5% {
+    --s: 5;
+  }
+  6% {
+    --s: 6;
+  }
+  7% {
+    --s: 7;
+  }
+  8% {
+    --s: 8;
+  }
+  9% {
+    --s: 9;
+  }
+  10% {
+    --s: 10;
+  }
+  11% {
+    --s: 11;
+  }
+  12% {
+    --s: 12;
+  }
+  13% {
+    --s: 13;
+  }
+  14% {
+    --s: 14;
+  }
+  15% {
+    --s: 15;
+  }
+  16% {
+    --s: 16;
+  }
+  17% {
+    --s: 17;
+  }
+  18% {
+    --s: 18;
+  }
+  19% {
+    --s: 19;
+  }
+  20% {
+    --s: 20;
+  }
+  21% {
+    --s: 21;
+  }
+  22% {
+    --s: 22;
+  }
+  23% {
+    --s: 23;
+  }
+  24% {
+    --s: 24;
+  }
+  25% {
+    --s: 25;
+  }
+  26% {
+    --s: 26;
+  }
+  27% {
+    --s: 27;
+  }
+  28% {
+    --s: 28;
+  }
+  29% {
+    --s: 29;
+  }
+  30% {
+    --s: 30;
+  }
+  31% {
+    --s: 31;
+  }
+  32% {
+    --s: 32;
+  }
+  33% {
+    --s: 33;
+  }
+  34% {
+    --s: 34;
+  }
+  35% {
+    --s: 35;
+  }
+  36% {
+    --s: 36;
+  }
+  37% {
+    --s: 37;
+  }
+  38% {
+    --s: 38;
+  }
+  39% {
+    --s: 39;
+  }
+  40% {
+    --s: 40;
+  }
+  41% {
+    --s: 41;
+  }
+  42% {
+    --s: 42;
+  }
+  43% {
+    --s: 43;
+  }
+  44% {
+    --s: 44;
+  }
+  45% {
+    --s: 45;
+  }
+  46% {
+    --s: 46;
+  }
+  47% {
+    --s: 47;
+  }
+  48% {
+    --s: 48;
+  }
+  49% {
+    --s: 49;
+  }
+  50% {
+    --s: 50;
+  }
+  51% {
+    --s: 51;
+  }
+  52% {
+    --s: 52;
+  }
+  53% {
+    --s: 53;
+  }
+  54% {
+    --s: 54;
+  }
+  55% {
+    --s: 55;
+  }
+  56% {
+    --s: 56;
+  }
+  57% {
+    --s: 57;
+  }
+  58% {
+    --s: 58;
+  }
+  59% {
+    --s: 59;
+  }
+  60% {
+    --s: 60;
+  }
+  61% {
+    --s: 61;
+  }
+  62% {
+    --s: 62;
+  }
+  63% {
+    --s: 63;
+  }
+  64% {
+    --s: 64;
+  }
+  65% {
+    --s: 65;
+  }
+  66% {
+    --s: 66;
+  }
+  67% {
+    --s: 67;
+  }
+  68% {
+    --s: 68;
+  }
+  69% {
+    --s: 69;
+  }
+  70% {
+    --s: 70;
+  }
+  71% {
+    --s: 71;
+  }
+  72% {
+    --s: 72;
+  }
+  73% {
+    --s: 73;
+  }
+  74% {
+    --s: 74;
+  }
+  75% {
+    --s: 75;
+  }
+  76% {
+    --s: 76;
+  }
+  77% {
+    --s: 77;
+  }
+  78% {
+    --s: 78;
+  }
+  79% {
+    --s: 79;
+  }
+  80% {
+    --s: 80;
+  }
+  81% {
+    --s: 81;
+  }
+  82% {
+    --s: 82;
+  }
+  83% {
+    --s: 83;
+  }
+  84% {
+    --s: 84;
+  }
+  85% {
+    --s: 85;
+  }
+  86% {
+    --s: 86;
+  }
+  87% {
+    --s: 87;
+  }
+  88% {
+    --s: 88;
+  }
+  89% {
+    --s: 89;
+  }
+  90% {
+    --s: 90;
+  }
+  91% {
+    --s: 91;
+  }
+  92% {
+    --s: 92;
+  }
+  93% {
+    --s: 93;
+  }
+  94% {
+    --s: 94;
+  }
+  95% {
+    --s: 95;
+  }
+  96% {
+    --s: 96;
+  }
+  97% {
+    --s: 97;
+  }
+  98% {
+    --s: 98;
+  }
+  99% {
+    --s: 99;
+  }
+  100% {
+    --s: 100;
+  }
+}
+
+.ui-pyramid-items {
+  width: 115.47005px;
+  height: 115.47005px;
+  position: relative;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  color: #ccc;
+  animation: u6aecc951 8s linear infinite backwards;
+}
+
+@keyframes u6aecc951 {
+  0% {
+    transform: rotateX(0deg) rotateY(30deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(390deg);
+  }
+}
+
+.ui-pyramid-items > li {
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: 86.60254px 50px;
+  border-top-width: 0;
+  border-bottom-color: currentColor;
+  counter-increment: count;
+  filter: drop-shadow(0 0 1px #000);
+}
+
+.ui-pyramid-items > li::after {
+  width: 115.47005px;
+  height: 115.47005px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: counter(count);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-50%);
+  color: #000;
+}
+
+.ui-pyramid-items > li:nth-child(2) {
+  transform: rotate3d(-1, 1.732, 0, 70.5deg);
+  transform-origin: 25% 50%;
+}
+
+.ui-pyramid-items > li:nth-child(3) {
+  transform: rotate3d(1, 0, 0, 70.5deg);
+  transform-origin: 50% 100%;
+}
+
+.ui-pyramid-items > li:nth-child(4) {
+  transform: rotate3d(1, 1.732, 0, -70.5deg);
+  transform-origin: 75% 50%;
+}
+
+.ui-rotate-triangle {
+  width: max-content;
+  position: relative;
+}
+
+.ui-rotate-triangle::before {
+  width: 346.41016px;
+  height: 346.41016px;
+  border-radius: 50%;
+  content: '';
+  display: block;
+  background-color: #ccc;
+}
+
+.ui-rotate-triangle::after {
+  width: 173.20508px;
+  height: 173.20508px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  padding: 2em;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  content: '三角形的旋转点应取其中心点（不是简单的宽高一半）（中心点也及外接圆或内切圆的圆心）';
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+}
+
+.ui-rotate-triangle > div {
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: 259.80762px 150px;
+  border-top-width: 0;
+  border-bottom-color: currentColor;
+  top: 0;
+  transform-origin: 150px 173.20508px;
+  animation: u2cf20aa3 8s linear infinite backwards;
+}
+
+@keyframes u2cf20aa3 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ui-spigot-items {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: u723ff87c 8s linear infinite backwards;
+}
+
+@keyframes u723ff87c {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(720deg);
+  }
+}
+
+.ui-spigot-items:hover {
+  animation-play-state: paused;
+}
+
+.ui-spigot-items > li {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #999;
+  box-sizing: border-box;
+  counter-increment: count;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+  background-color: #ccc;
+}
+
+.ui-spigot-items > li::after {
+  content: counter(count);
+}
+
+.ui-spigot-items > li:nth-child(1) {
+  transform: translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(2) {
+  transform: rotateX(90deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(3) {
+  transform: rotateX(180deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(4) {
+  transform: rotateX(270deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(5) {
+  transform: rotateY(90deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(6) {
+  transform: rotateY(270deg) translateZ(40px);
+}
+
+.ui-spigot-items {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: ua01e28bb 8s linear infinite backwards;
+}
+
+@keyframes ua01e28bb {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(720deg);
+  }
+}
+
+.ui-spigot-items:hover {
+  animation-play-state: paused;
+}
+
+.ui-spigot-items > li {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #999;
+  box-sizing: border-box;
+  counter-increment: count;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+  background-color: #ccc;
+}
+
+.ui-spigot-items > li::after {
+  content: counter(count);
+}
+
+.ui-spigot-items > li:nth-child(1) {
+  transform: translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(2) {
+  transform: rotateX(90deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(3) {
+  transform: rotateX(180deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(4) {
+  transform: rotateX(270deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(5) {
+  transform: rotateY(90deg) translateZ(40px);
+}
+
+.ui-spigot-items > li:nth-child(6) {
+  transform: rotateY(270deg) translateZ(40px);
+}
+
+.css-filter {
+  --basic: 10px;
+  --corner: calc(var(--basic) * 2);
+  width: max-content;
+  height: calc(var(--basic) * 10);
+  margin: var(--basic);
+  padding: calc(var(--basic) * 2);
+  border-radius: var(--basic);
+  display: flex;
+  box-shadow: 0 0 var(--basic) #f00;
+  color: #ccc;
+}
+
+.css-filter > li {
+  width: calc(var(--basic) * 10);
+  position: relative;
+}
+
+.css-filter > li:not(:first-child) {
+  margin-left: var(--basic);
+}
+
+.css-filter > :nth-child(1) {
+  clip-path: polygon(0 0, calc(100% + var(--corner) * -1) 0, 100% var(--corner), 100% 100%);
+  filter: drop-shadow(0 0 var(--basic) #0f0);
+  background: currentColor content-box;
+}
+
+.css-filter > :nth-child(2) {
+  filter: drop-shadow(0 0 var(--basic));
+}
+
+.css-filter > :nth-child(2)::before {
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: calc(var(--basic) * 5) calc(var(--basic) * 2.5);
+  border-top-width: 0;
+  border-bottom-color: currentColor;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  content: '';
+}
+
+.css-filter::after {
+  width: 22em;
+  margin-left: 2em;
+  content: 'bug：当前元素clip-path + drop-shadow ，当其前面元素（只要满足dom树在其前面，包括自身）出现 transform 的动画，右上角已被裁切不可见的角再次出现【备注：Chrome 73.0.3683.86（正式版本）（64 位）】';
+  color: #333;
+}
+
+.mixin-arrow {
+  --b: 45deg;
+  display: flex;
+}
+
+.mixin-arrow::after {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  line-height: 0.5em;
+  border: solid;
+  border-width: 2px 2px 0 0;
+  box-sizing: border-box;
+  transform: rotate(var(--b));
+  display: block;
+}
+
+.mixin-triangle-equil {
+  display: flex;
+}
+
+.mixin-triangle-equil::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: 1.73205em 1em;
+  border-top-width: 0;
+  border-bottom-color: currentColor;
+}
+
+.mixin-triangle-equil::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: 1.73205em 1em;
+  border-bottom-width: 0;
+  border-top-color: currentColor;
+}
+
+.mixin-triangle {
+  display: flex;
+}
+
+.mixin-triangle::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: 1em 1em;
+  border-top-width: 0;
+  border-bottom-color: currentColor;
+}
+
+.mixin-triangle::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border: solid transparent;
+  border-width: 1em 1em;
+  border-bottom-width: 0;
+  border-top-color: currentColor;
+  margin-left: 1em;
+}
+
+.mixin-quick {
+  font-size: 1.25rem;
+  width: 80%;
+  padding: 0.5em 1em 0.25em 0.8em;
+  line-height: 2em;
+  font-weight: 400;
+  text-indent: 0.8em;
+  content: "10";
+  z-index: 10;
+  opacity: 0.7;
+}
+
+.mixin-quick::before {
+  content: "mquick 测试";
+}
+
+.function-calc {
+  --a: 20px;
+  --b: 1.5;
+  width: calc(3px + 32% + 3cm + var(--a) * (var(--b) + 0.5));
+  line-height: 1em;
+}
+
+.function-calc::after {
+  content: "fcalc 测试";
+}
+
+.cssnext {
+  --a: 20px;
+  --b: 1em;
+  --test-color: #333;
+  width: calc(90% - 5em + (var(--a) + var(--b)) / 2);
+  border: 0 solid;
+  border-top-width: calc(var(--a) * 0.75);
+  border-right-width: calc(var(--a) / 2 + 5px);
+  border-bottom-width: calc(var(--a) / 2 + 5px);
+  border-left-width: calc(var(--a) / 2 + 5px);
+  line-height: calc(0.5rem + 0.5em + (var(--a) + var(--b)) / 2);
+  transition: 0.3s;
+  text-indent: calc(var(--a));
+  color: var(--test-color);
+}
+
+.cssnext::before {
+  content: "cssnext => var 测试";
+}
+
+.cssnext:hover {
+  --test-color: #666;
+}
+
+.table-transition {
+  --border-width: 1px;
+  width: 80%;
+  margin: auto;
+  padding: var(--border-width);
+  border-collapse: separate;
+  border-spacing: 0;
+  line-height: 1.7;
+  box-sizing: border-box;
+}
+
+.table-transition > tbody > tr:nth-child(2n) {
+  animation: ue031863f 0.5s;
+}
+
+@keyframes ue031863f {
+  0% {
+    transform: translate(-30%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.table-transition > tbody > tr:nth-child(2n + 1) {
+  animation: uacf7e156 0.5s;
+}
+
+@keyframes uacf7e156 {
+  0% {
+    transform: translate(30%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.table-transition > tbody > tr:not(:last-child) > td:nth-child(2n) {
+  animation: udd0952d6 0.5s;
+}
+
+@keyframes udd0952d6 {
+  0% {
+    transform: translate(0, 100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.table-transition > tbody > tr:not(:last-child) > td:nth-child(2n + 1) {
+  animation: uc71869ec 0.5s;
+}
+
+@keyframes uc71869ec {
+  0% {
+    transform: translate(0, -100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.table-transition > tbody > tr:not(:first-child):not(:last-child):not(:nth-child(5)) {
+  color: #f00;
+}
+
+.table-transition > tbody > tr:nth-child(2), .table-transition > tbody > tr:nth-child(3) {
+  text-shadow: 0 0 .2em;
+}
+
+.table-transition > tbody > tr:nth-child(2):hover, .table-transition > tbody > tr:nth-child(3):hover {
+  text-shadow: 0 0 .2em #000;
+}
+
+.table-transition td, .table-transition th {
+  box-shadow: 0 0 0 var(--border-width) #444;
+  background-color: #fff;
+}
+
+.libsass3-5-0::before {
+  content: "测试libsass@3.5.0新增的功能";
+}
+
+.libsass3-5-0::after {
+  content: "该宽度是通过科学计数法来定义";
+  width: 3e2px;
+  display: block;
+}
+
+.libsass3-5-0[custom-value='abc'] {
+  color: #f00;
+}
+
+.libsass3-5-0[custom-value='ABC' i] {
+  color: #000;
+}
+
+#indeterminate:indeterminate + span {
+  color: #f00;
+}
+
+.scroll-translate {
+  width: 80%;
+  margin-left: 10%;
+  padding-top: 0;
+  height: 150px;
+  position: relative;
+  overflow: auto;
+}
+
+.counter-none {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.counter-none ul {
+  counter-reset: counter-count 0;
+}
+
+.counter-none li {
+  padding-left: 1em;
+  counter-increment: counter-count;
+}
+
+.counter-none li > span::after {
+  content: counters(counter-count, "-");
+}
+
+.counter-none > li:last-child {
+  display: none;
+}
+
+.jitter-blur {
+  height: 200px;
+  position: relative;
+}
+
+.jitter-blur-box {
+  position: absolute;
+  bottom: 50%;
+  transform: translateY(50%);
+  transform-style: preserve-3d;
+  min-width: 10%;
+  white-space: nowrap;
+  background-color: #ccc;
+}
+
+.jitter-blur-box > p {
+  margin-bottom: 1em;
+}
+
+.jitter-blur-box::after {
+  content: "after";
+  display: block;
+  transition: 0.3s;
+}
+
+.jitter-blur-box:hover::after {
+  transform: scale(1);
+}
+
+.fline {
+  font-size: 17px;
+  line-height: 1.25rem;
+}
+
+.fline > :nth-child(1) {
+  line-height: 1.05882em;
+}
+
+.fline > :nth-child(1)::after {
+  content: "未经过方法 fline 处理的 line-height";
+}
+
+.fline > :nth-child(2) {
+  line-height: 1.05883em;
+}
+
+.fline > :nth-child(2)::after {
+  content: "经过方法 fline 处理的 line-height";
+}
+
+.for-style > li {
+  width: 3em;
+  line-height: 1em;
+  margin-left: .2em;
+  border: .3em solid;
+  float: left;
+  counter-increment: li-count;
+  text-align: center;
+  background: 50% / 100% 100% no-repeat;
+}
+
+.for-style > li::before {
+  content: counter(li-count);
+}
+
+.for-style > :nth-child(1) {
+  border-color: #000;
+  color: #000;
+  background-image: url(../node_modules/@vope/scss/images/img3.jpg);
+}
+
+.for-style > :nth-child(2) {
+  border-color: #333;
+  color: #333;
+  background-image: url(../node_modules/@vope/scss/images/img4.jpg);
+}
+
+.for-style > :nth-child(3) {
+  border-color: #666;
+  color: #666;
+  background-image: url(../node_modules/@vope/scss/images/img2.jpeg);
+}
+
+.for-style > :nth-child(4) {
+  border-color: #999;
+  color: #999;
+  background-image: url(../node_modules/@vope/scss/images/img4.jpeg);
+}
+
+.scroll-panel {
+  width: 100px;
+  height: 200px;
+  overflow: auto;
+}
+
+.scroll-panel-content {
+  height: 500px;
+  background: linear-gradient(#fff, #555);
+}
+
+#Inputs {
+  columns: auto 5;
+  text-align: center;
+}
+
+#Inputs > div {
+  margin: .5em .1em;
+  display: inline-block;
+}
+
+#Inputs input {
+  max-width: 100%;
+}
+
+.api-directory {
+  flex: 1;
+}
+
+.api-directory::after {
+  height: 100%;
+  margin-top: 0;
+}
+
+.scroll-translate {
+  width: 92%;
+  margin-left: 4%;
+}
+
+.table-transition {
+  width: 90%;
+}
+
+#Snapshot {
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  display: flex;
+  box-shadow: 0 0 3px;
+  transform: translate(-50%, -50%);
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #33691e;
+  background-color: currentColor;
+}
+
+#Snapshot::after {
+  font: 30px/1 element-ui;
+  content: '\e79b';
+  color: #fff;
+}
+
+#Dialog {
+  width: 80%;
+  height: 80%;
+  position: fixed;
+  right: 50%;
+  bottom: 50%;
+  transform: translate(50%, 50%);
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#Dialog > i {
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  font: 30px/1 element-ui;
+  transform: translate(100%, -100%);
+  cursor: pointer;
+  background-color: #fff;
+}
+
+#Dialog > i::after {
+  content: '\e78d';
+}
+
+#Dialog > i:hover {
+  color: #0089e7;
+}
+
+#Dialog > canvas {
+  max-width: 100%;
+  max-height: 100%;
+  background-color: #fff;
+}
+
+.snapshot-mask > :not(#Dialog) {
+  filter: blur(5px);
+  pointer-events: none;
+}

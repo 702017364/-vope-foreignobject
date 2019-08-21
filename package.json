@@ -1,0 +1,30 @@
+{
+  "name": "@vope/foreignobject",
+  "version": "1.0.0",
+  "description": "js截图、web截图",
+  "main": "bin/index.js",
+  "scripts": {
+    "dev": "gulp",
+    "build": "gulp --production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "foreignObject",
+    "截图"
+  ],
+  "author": "vope",
+  "license": "ISC",
+  "dependencies": {
+    "@vope/scss": "^2.0.6-bate.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-sass": "^4.0.2",
+    "minimist": "^1.2.0"
+  }
+}
