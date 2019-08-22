@@ -101,7 +101,6 @@ const svg2base64 = (content) => {
 const img2canvas = (src, callback) => {
   const img = new Image();
   img.crossOrigin = 'Anonymous';
-  img.src = src;
   img.onload = () => {
     const canvas = document.createElement('canvas');
     const cvs = canvas.getContext('2d');
@@ -110,6 +109,7 @@ const img2canvas = (src, callback) => {
     cvs.drawImage(img, 0, 0);
     callback(canvas);
   };
+  img.src = src;
 };
 
 /**
@@ -249,12 +249,6 @@ const RE_EXEC_URLS = /(none|[a-z-]+\((?:[^\(\)]|\([^\(\)]+\))+\))(?:,\s)?/g; //�
 function handleURL8CSSStyle(value){
   const list = [];
   let execs;
-  const canvas2url = (canvas, callback) => {
-    const value = canvas
-      ? `url(${canvas.toDataURL('image/png', 1)})` 
-      : 'none';
-    callback(value);
-  };
   const transcodSVG = (src, matchs) => {
     const start = matchs[1].length;
     const slice = src.slice(start);
@@ -391,10 +385,9 @@ class ForeignObject{
 
   /**
    * 截图
-   * @param {Function} callback 测试回调，用于将拷贝对象传出
    * @return {Promise}
    */
-  async dragCanvas(callback){
+  async drawCanvas(){
     const {
       element,
       option,
@@ -404,7 +397,6 @@ class ForeignObject{
     this.addFonts = await this.collectFonts();
     const clone = this.clone = this.deepCloneElement(element);
     this.loadFonts(clone);
-    typeof callback == 'function' && callback(clone);
     return new Promise((resolve) => Promise.all(queues).then(() => {
       createForeignObject(clone, element.offsetWidth, element.offsetHeight, (canvas) => {
         if(option.download){
@@ -414,6 +406,7 @@ class ForeignObject{
           const value = canvas.toDataURL(downloadType);
           createDownload(name, value);
         }
+        option.test && (canvas.cloneElement = clone);
         resolve(canvas);
       });
     }));
@@ -466,6 +459,7 @@ class ForeignObject{
     const clone = this.cloneNode(element);
     if(!clone) return;
     const tag = element.tagName.toLocaleLowerCase();
+    //排除不能拷贝子节点的元素
     ['textarea'].includes(tag) || [].forEach.call(element.childNodes, (node) => {
       let cloneNode;
       switch(node.nodeType){
@@ -492,8 +486,7 @@ class ForeignObject{
     const {
       clearPlaceholder,
     } = this.option;
-    const clone = element.cloneNode();
-    clone.style.cssText = this.cloneStyle(element, (key, value) => clone.style[key] = value);
+    let clone = element.cloneNode();
     let src;
     tag:
     switch(element.tagName.toLocaleLowerCase()){
@@ -530,6 +523,12 @@ class ForeignObject{
           }
         }
         break;
+      case 'canvas':
+        clone = new Image();
+        clone.width = element.width;
+        clone.height = element.height;
+        clone.src = element.toDataURL('image/png', 1);
+        break;
       case 'iframe':
         clone.removeAttribute('src');
         break;
@@ -537,6 +536,7 @@ class ForeignObject{
         clearPlaceholder && clone.removeAttribute('placeholder');
         clone.textContent = element.value;
     }
+    clone.style.cssText = this.cloneStyle(element, (key, value) => clone.style[key] = value);
     return clone;
   }
 
@@ -633,5 +633,5 @@ class ForeignObject{
 
 export default (element, option) => {
   const obj = new ForeignObject(element, option);
-  return obj.dragCanvas();
+  return obj.drawCanvas();
 };
