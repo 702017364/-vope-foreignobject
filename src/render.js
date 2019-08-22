@@ -143,6 +143,7 @@ fetchJSON('static/inputs.json').then((data) => {
     disabled = true;
     foreignObject(document.querySelector('.test-list'), {
       download: false,
+      test: true,
     }).then((canvas) => {
       dialog || (dialog = new Dialog());
       dialog.append(canvas);
@@ -151,3 +152,57 @@ fetchJSON('static/inputs.json').then((data) => {
   }, false);
   document.body.appendChild(node);
 })();
+
+((cls) => {
+  const wrap = $s(cls);
+  const list = wrap.children;
+  const first = list[0];
+  const style = window.getComputedStyle(first);
+  const width = parseInt(style.getPropertyValue('width'));
+  const height = parseInt(style.getPropertyValue('height'));
+  const draws = [
+    [
+      [width / 2, 0],
+      [width, height / 2],
+      [width / 2, height],
+      [0, height / 2],
+    ],
+    [
+      [width / 4, 0],
+      [width / 2, height / 4],
+      [width / 4 * 3, 0],
+      [width, height / 4],
+      [width / 4 * 3, height / 2],
+      [width, height / 4 * 3],
+      [width / 4 * 3, height],
+      [width / 2, height / 4 * 3],
+      [width / 4, height],
+      [0, height / 4 * 3],
+      [width / 4, height / 2],
+      [0, height / 4],
+    ],
+  ];
+  [].forEach.call(list, (canvas, index) => {
+    canvas.width = width;
+    canvas.height = height;
+    const cvs = canvas.getContext('2d');
+    const [move, ...lines] = draws[index];
+    cvs.beginPath();
+    cvs.moveTo(...move);
+    for(let i = 0, j = lines.length; i < j; i++){
+      cvs.lineTo(...lines[i]);
+    }
+    cvs.closePath();
+    cvs.fillStyle = window.getComputedStyle(canvas).getPropertyValue('color');
+    cvs.fill();
+  });
+})('.canvas-list');
+
+((id) => {
+  const wrap = $id(id);
+  document.querySelector('canvas').toBlob((blob) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(blob);
+    wrap.appendChild(img);
+  }, 'image/png');
+})('Mask');

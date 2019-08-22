@@ -2,6 +2,30 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 
 @import '../node_modules/@vope/scss/sass/test.scss';
 
+#Mask{
+  > img{
+    -webkit-mask-image: radial-gradient(transparent, #f00);
+    mask-image: -moz-element(#Var);
+  }
+}
+
+.canvas-list{
+  position: relative; display: flex; justify-content: center; align-items: center;
+
+  > canvas{
+    max-width: 100%; max-height: 100%; -webkit-mask: bgurl('img4.jpeg');
+
+    &:first-child{
+      position: relative; z-index: 2; filter: opacity(.6); background-color: #ccc;
+    }
+
+    &:last-child{
+      @include mcenter();
+      filter: blur(3px); color: #f00;
+    }
+  }
+}
+
 #Inputs{
   columns: auto 5; text-align: center;
 
@@ -42,7 +66,7 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 #Dialog{
   @include mratio(80%);
   @include mcenter(0, fixed);
-  display: flex; justify-content: center; align-items: center;
+  display: flex; justify-content: center;
 
   > i{
     @include mratio(1em);
