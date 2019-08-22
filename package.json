@@ -1,6 +1,6 @@
 {
   "name": "@vope/foreignobject",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "js截图、web截图",
   "main": "bin/index.js",
   "scripts": {

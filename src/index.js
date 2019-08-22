@@ -100,8 +100,8 @@ const svg2base64 = (content) => {
  */
 const img2canvas = (src, callback) => {
   const img = new Image();
+  img.crossOrigin = 'Anonymous';
   img.src = src;
-  img.crossOrigin = 'anonymous';
   img.onload = () => {
     const canvas = document.createElement('canvas');
     const cvs = canvas.getContext('2d');

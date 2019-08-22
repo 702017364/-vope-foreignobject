@@ -142,7 +142,7 @@ fetchJSON('static/inputs.json').then((data) => {
     if(disabled) return;
     disabled = true;
     foreignObject(document.querySelector('.test-list'), {
-      download: true,
+      download: false,
     }).then((canvas) => {
       dialog || (dialog = new Dialog());
       dialog.append(canvas);

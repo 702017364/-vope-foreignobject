@@ -10,7 +10,7 @@ npm install @vope/foreignobject
 # 开发环境
 npm run dev
 
-# 发布环境
+# 发布
 npm run build
 ```
 
@@ -37,3 +37,7 @@ foreignObkect(element, {
   downloadType: 'png', //下载文件类型（设置自动下载时有效）
 }).then((canvas) => {...});
 ```
+
+## Changlog
+###### 1.0.1
+  - 修复跨域图片设置错误
