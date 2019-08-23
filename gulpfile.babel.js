@@ -4,6 +4,7 @@ import sass from 'gulp-sass';
 import NodeSass from 'node-sass';
 import minimist from 'minimist';
 import bs from 'browser-sync';
+import uglify from './node/uglify';
 
 sass.compiler = NodeSass;
 
@@ -12,6 +13,7 @@ const dev = !minimist(process.argv.slice(2)).production;
 
 const getCompileECMA = (file, dest) => () => gulp
   .src(file)
+  .pipe(uglify())
   .pipe(gulp.dest(dest));
 
 const compileScss = () => gulp

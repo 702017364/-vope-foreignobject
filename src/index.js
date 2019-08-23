@@ -368,14 +368,6 @@ async function collectFonts(fontfaces){
 };
 
 class ForeignObject{
-  static option = {
-    clearPlaceholder: false,
-    download: false,
-    downloadName: null,
-    downloadType: 'png',
-    ignoreFetchError: true,
-  };
-
   /**
    * 构造函数
    * @param {HTMLElement} element 进行截图的节点
@@ -391,7 +383,13 @@ class ForeignObject{
       throw new Error('截图元素（CSS）display 属性值不能为 "none"');
     }
     this.element = element; //截图元素
-    this.option = Object.assign(ForeignObject.option || {}, option); //配置项
+    this.option = Object.assign({
+      clearPlaceholder: false,
+      download: false,
+      downloadName: null,
+      downloadType: 'png',
+      ignoreFetchError: true,
+    }, option); //配置项
     this.fecthCaches = {}; //数据缓存（主要为图片，fontface 本身有做去重处理）
   }
 

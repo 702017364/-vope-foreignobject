@@ -1,16 +1,18 @@
 {
   "name": "@vope/foreignobject",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "js截图、web截图",
   "main": "bin/index.js",
   "scripts": {
     "dev": "gulp",
     "build": "gulp --production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "aa": "babel-node uglify.js"
   },
   "keywords": [
     "foreignObject",
-    "截图"
+    "截图",
+    "html2canvas"
   ],
   "author": "vope",
   "license": "ISC",
@@ -19,13 +21,18 @@
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.5.5",
     "browser-sync": "^2.26.7",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.2.0",
     "gulp-sass": "^4.0.2",
-    "minimist": "^1.2.0"
+    "gulp-util": "^3.0.8",
+    "minimist": "^1.2.0",
+    "nodemon": "^1.19.1",
+    "through2": "^3.0.1",
+    "uglify-es": "^3.3.9"
   },
   "repository": {
     "type": "git",

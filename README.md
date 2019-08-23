@@ -25,6 +25,8 @@ npm run build
 * ::placeholder 设置的样式无效
 * input[type=color] 会造成截图失败
 * 如果设置了 box-shadow 则截图的开始位置是从 box-shadow 上、左值边际开始计算
+* （Firefox）使用 columns 排版产生错乱
+* （Firefox）截图 vedio 时偶尔会出现空白
 
 ## Usage
 ```
@@ -35,9 +37,14 @@ foreignObkect(element, {
   download: false, //设置是否自动下载
   downloadName: null, //下载文件名称，为空时会自动创建一个随机值（设置自动下载时有效）
   downloadType: 'png', //下载文件类型（设置自动下载时有效）
+  ignoreFetchError: true, //是否忽略请求错误，如果设置为 false 则当请求出现错误时将会被抛出并且中断截图
 }).then((canvas) => {...});
 ```
 
 ## Changlog
-###### 1.0.1
+##### 1.0.2
+  - 修复截图 canvas 元素
+  - 修复截图 vedio 元素
+  - 增加配置字段 ignoreFetchError
+##### 1.0.1
   - 修复跨域图片设置错误
