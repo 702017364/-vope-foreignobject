@@ -144,6 +144,7 @@ fetchJSON('static/inputs.json').then((data) => {
     foreignObject(document.querySelector('.test-list'), {
       download: false,
       test: true,
+      ignoreFetchError: false,
     }).then((canvas) => {
       dialog || (dialog = new Dialog());
       dialog.append(canvas);

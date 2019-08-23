@@ -2,6 +2,16 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 
 @import '../node_modules/@vope/scss/sass/test.scss';
 
+.test-video{
+  > video{
+    position: relative;
+
+    &::after{
+      width: 10%; height: 10%; position: absolute; top: 0; left: 0; content: ''; z-index: 9; background-color: currentColor;
+    }
+  }
+}
+
 #Mask{
   > img{
     -webkit-mask-image: radial-gradient(transparent, #f00);
@@ -13,7 +23,11 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
   position: relative; display: flex; justify-content: center; align-items: center;
 
   > canvas{
-    max-width: 100%; max-height: 100%; -webkit-mask: bgurl('img4.jpeg');
+    max-width: 100%; max-height: 100%; position: relative; -webkit-mask: bgurl('img4.jpeg');
+
+    &::after{
+      width: 10%; height: 10%; position: absolute; top: 0; left: 0; content: ''; z-index: 9; background-color: currentColor;
+    }
 
     &:first-child{
       position: relative; z-index: 2; filter: opacity(.6); background-color: #ccc;
