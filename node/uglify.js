@@ -18,7 +18,7 @@ export default () => {
     content = minify(content, {
       toplevel: true,
     }).code;
-    file.contents = new Buffer(content);
+    file.contents = Buffer.from(content);
     file.path = gutil.replaceExtension(src, '.js');
     cb(null, file);
   });
