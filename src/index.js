@@ -64,6 +64,20 @@ const createDownload = (fileName, src) => {
 };
 
 /**
+ * 创建一个图片对象
+ * @param {Object} 配置参数
+ * @return {Image}
+ */
+const createImage = ({src, width, height, load}) => {
+  const img = new Image();
+  width === void 0 || (img.width = width);
+  height === void 0 || (img.width = height);
+  typeof load == 'function' && (img.onload = () => load(img));
+  img.src = src instanceof HTMLCanvasElement ? src.toDataURL('image/png', 1) : src;
+  return img;
+}
+
+/**
  * 插入一个关于 @fontface 的 style
  * @param {FontFace} fontface 字体对象
  * @param {String} 字体路径
@@ -83,6 +97,30 @@ const appendFontfaceStyle = (fontface, src, type, parentNode) => {
   parentNode.appendChild(style);
 };
 
+const RE_PREUDO = /^:{0,2}([^:]+)$/; //匹配伪类
+/**
+ * 检测指定伪元素
+ * @param {HTMLElement|CSSStyleDeclaration} element
+ *  - 当类型为 HTMLElement 则检测节点是否含有指定伪元素
+ *  - 当类型为 CSSStyleDeclaration 则检测该（伪元素）style 是否为有效值
+ * @param {String} pseudo 只支持 ::before 和 ::after
+ * @return {Boolean}
+ */
+const hasPseudoElement = (element, pseudo) => {
+  let style;
+  if(element instanceof HTMLElement){
+    const matchs = pseudo.match(RE_PREUDO);
+    if(!matchs) return false;
+    pseudo = `::${matchs[1]}`;
+    style = getComputedStyle(element, pseudo);
+  } else{
+    style = element;
+  }
+  const detects = ['none', 'normal'];
+  const content = style.getPropertyValue('content');
+  return !detects.includes(content) && style.getPropertyValue('dispaly') != 'none';
+};
+
 /**
  * 将 svg 格式字符串转换成 base64 格式字符串
  * @param {String} content SVG 内容
@@ -94,30 +132,11 @@ const svg2base64 = (content) => {
 };
 
 /**
- * 获取图片并转换为 canvas
- * @param {String} src 
- * @param {Function} callback 图片转换成功的回调
- */
-const img2canvas = (src, callback) => {
-  const img = new Image();
-  img.crossOrigin = 'Anonymous';
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    const cvs = canvas.getContext('2d');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    cvs.drawImage(img, 0, 0);
-    callback(canvas);
-  };
-  img.src = src;
-};
-
-/**
- * 加载 fontface
+ * 加载文件并转换为 base64 形式
  * @param {String} src
  * @return {Promise}
  */
-const fetchFontface = (src) => {
+const fetchFileStream = (src) => {
   return new Promise((resolve, reject) => {
     fetch(src)
       .then((res) => {
@@ -196,17 +215,6 @@ const list2CSSStyle = (() => {
 })();
 
 /**
- * 创建一个隔离空间
- * @return {HTMLIFrameElement}
- */
-function createIsolation(){
-  const ifr = document.createElement('iframe');
-  ifr.style.cssText = 'width: 20px; height: 20px; position: fixed; top: -99px; left: -99px;';
-  document.body.appendChild(ifr);
-  return ifr;
-}
-
-/**
  * 创建截图
  * @param {HTMLElement} cloneElement 节点（拷贝）对象
  * @param {Number} width 节点的宽度
@@ -217,12 +225,15 @@ function createForeignObject(cloneElement, width, height, callback){
   new Promise((resolve) => {
     if(cloneElement){
       const foreignContext = encodeURIComponent(new XMLSerializer().serializeToString(cloneElement));
-      const img = new Image();
-      img.src = `data:image/svg+xml;charset=utf-8,
-      <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-        <foreignObject width="100%" height="100%" x="0" y="0">${foreignContext}</foreignObject>
-      </svg>`;
-      img.onload = () => resolve(img);
+      createImage({
+        width,
+        height,
+        src: `data:image/svg+xml;charset=utf-8,
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+          <foreignObject width="100%" height="100%" x="0" y="0">${foreignContext}</foreignObject>
+        </svg>`,
+        load: resolve,
+      });
     } else{
       resolve();
     }
@@ -262,7 +273,7 @@ function handleURL8CSSStyle(value){
       if(!RE_BASE64.test(src)){
         const queue = this.getImageBase64(src);
         list.push(new Promise((resolve) => {
-          queue.then(value => resolve(`url(${value})`));
+          queue.then(value => value ? resolve(`url(${value})`) : 'none');
         }));
         continue;
       }
@@ -362,6 +373,7 @@ class ForeignObject{
     download: false,
     downloadName: null,
     downloadType: 'png',
+    ignoreFetchError: true,
   };
 
   /**
@@ -426,14 +438,20 @@ class ForeignObject{
         src,
         type,
       } = opt[key];
-      pushQueue(this.queues, (resolve) => 
-        fetchFontface(src)
+      pushQueue(this.queues, (resolve) => {
+        fetchFileStream(src)
           .then((e) => {
             appendFontfaceStyle(fontface, e.target.result, type, this.clone);
             resolve();
           })
-          .catch(resolve)
-      );
+          .catch(() => {
+            if(this.option.ignoreFetchError){
+              resolve();
+            } else{
+              throw new Error(`加载服务器字体 ${src} 错误`);
+            }
+          });
+      });
     }
   }
 
@@ -515,7 +533,7 @@ class ForeignObject{
         src = element.currentSrc || element.src;
         if(!RE_BASE64.test(src)){
           clone.removeAttribute('src');
-          this.getImageBase64(src).then(value => clone.src = value);
+          this.getImageBase64(src).then(value => value && (clone.src = value));
         } else{
           const matchs = src.match(RE_BASE64_SVG);
           if(matchs){
@@ -523,11 +541,45 @@ class ForeignObject{
           }
         }
         break;
+      case 'video':
+        clone.crossOrigin = 'Anonymous';
+        clone.src = element.currentSrc;
+        clone.currentTime = element.currentTime;
+        clone.autoplay = false;
+        clone.loop = false;
+        pushQueue(this.queues, (resolve) => {
+          const canplayEvent = () => {
+            clone.removeEventListener('canplay', canplayEvent, false);
+            const canvas = document.createElement('canvas');
+            const width = canvas.width = element.videoWidth;
+            const height = canvas.height = element.videoHeight;
+            const cvs = canvas.getContext('2d');
+            cvs.drawImage(clone, 0, 0);
+            const img = createImage({
+              src: canvas,
+              width,
+              height
+            });
+            img.style.cssText = clone.style.cssText;
+            clone.parentNode.replaceChild(img, clone);
+            resolve();
+          };
+          clone.addEventListener('canplay', canplayEvent, false);
+          clone.onerror = () => {
+            if(this.option.ignoreFetchError){
+              resolve();
+            } else{
+              throw new Error(`加载视频 ${element.currentSrc} 错误`);
+            }
+          };
+        });
+        break;
       case 'canvas':
-        clone = new Image();
-        clone.width = element.width;
-        clone.height = element.height;
-        clone.src = element.toDataURL('image/png', 1);
+        clone = createImage({
+          width: element.width,
+          height: element.height,
+          src: element,
+        });
         break;
       case 'iframe':
         clone.removeAttribute('src');
@@ -546,13 +598,8 @@ class ForeignObject{
    * @param {HTMLElement} cloneElement 拷贝元素
    */
   clonePseudoElements(element, cloneElement){
-    const detects = ['none', 'normal'];
     const pseudos = [];
-    ['before', 'after'].forEach((pseudo) => {
-      const style = window.getComputedStyle(element, `::${pseudo}`);
-      if(detects.includes(style.getPropertyValue('content'))) return;
-      pseudos.push(pseudo);
-    });
+    ['before', 'after'].forEach((pseudo) => hasPseudoElement(element, pseudo) && pseudos.push(pseudo));
     if(!pseudos.length) return;
     const uuid = createUuid('p');
     cloneElement.classList.add(uuid);
@@ -618,12 +665,25 @@ class ForeignObject{
     const cache = fecthCaches[src];
     if(cache) return cache;
     const queue = new Promise((resolve) => {
-      img2canvas(src, (canvas) => {
-        if(canvas){
-          const value = canvas.toDataURL('image/png', 1);
-          resolve(value);
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const cvs = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        cvs.drawImage(img, 0, 0);
+        const value = canvas.toDataURL('image/png', 1);
+        resolve(value);
+      };
+      img.onerror = () => {
+        if(this.option.ignoreFetchError){
+          resolve();
+        } else{
+          throw new Error(`加载图片 ${src} 错误`);
         }
-      });
+      };
+      img.src = src;
     });
     this.queues.push(queue);
     fecthCaches[src] = queue;
