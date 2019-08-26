@@ -4,6 +4,7 @@ import sass from 'gulp-sass';
 import NodeSass from 'node-sass';
 import minimist from 'minimist';
 import bs from 'browser-sync';
+import gif from 'gulp-if';
 import uglify from './node/uglify';
 
 sass.compiler = NodeSass;
@@ -13,7 +14,7 @@ const dev = !minimist(process.argv.slice(2)).production;
 
 const getCompileECMA = (file, dest) => () => gulp
   .src(file)
-  .pipe(uglify())
+  .pipe(gif(!dev, uglify()))
   .pipe(gulp.dest(dest));
 
 const compileScss = () => gulp
@@ -21,7 +22,7 @@ const compileScss = () => gulp
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
-  .pipe(clean())
+  .pipe(gif(!dev, clean()))
   .pipe(gulp.dest('styles'));
 
 const compileECMAbin = getCompileECMA('src/index.js', 'bin');
