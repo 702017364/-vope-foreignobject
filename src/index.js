@@ -5,8 +5,16 @@ const RE_BROWSER_PREFIX = /^-(?:ms|webkit|moz)-/g; //匹配（CSS）浏览器前
 const COMPAT_FONTFACE = { //浏览器对服务器字体格式支持性
   woff2: true,
   woff: true,
-  svg: /Opera|OPR|Chrome|Safari/i.test(navigator.userAgent),
+  svg: (() => {
+    const agent = navigator.userAgent;
+    if(['Opera', 'Firefox', 'Chrome'].some((value) => agent.includes(value))){
+      return false;
+    } else{
+      return agent.includes('Safari');
+    }
+  })(),
   truetype: true,
+  opentype: true,
 };
 
 /**
@@ -162,18 +170,18 @@ const RE_NET_SPLIT = /[\?#]/; //用于将地址中的 hash 及 search 和前面�
 
 /**
  * 简单的拼接两个路径
- * @param {String} part 相对路径
- * @param {String} path 完整路径
+ * @param {String} url 相对地址或者绝对地址
+ * @param {String} base 如果URL地址是相对地址则作为相对计算的基础地址
  * @return {String}
  */
-const joinPath = (part, path) => {
-  if(RE_NET.test(part)){
-    return part;
-  } else if(RE_NET_ROOT.test(part)){
-    const matchs = path.match(RE_NET_ORIGIN);
-    return matchs[0] + part;
+const joinPath = (url, base) => {
+  if(RE_NET.test(url)){
+    return url;
+  } else if(RE_NET_ROOT.test(url)){
+    const matchs = base.match(RE_NET_ORIGIN);
+    return matchs[0] + url;
   } else{
-    return path.split(RE_NET_SPLIT)[0] + part;
+    return base.split(RE_NET_SPLIT)[0] + url;
   }
 };
 
@@ -228,10 +236,7 @@ function createForeignObject(cloneElement, width, height, callback){
       createImage({
         width,
         height,
-        src: `data:image/svg+xml;charset=utf-8,
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-          <foreignObject width="100%" height="100%" x="0" y="0">${foreignContext}</foreignObject>
-        </svg>`,
+        src: `data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><foreignObject width="100%" height="100%" x="0" y="0">${foreignContext}</foreignObject></svg>`,
         load: resolve,
       });
     } else{
@@ -301,10 +306,10 @@ function queryFontfaces(fonts, styleSheets, defHref){
   if(!size) return option;
   const caches = {};
   fonts.forEach((fontface) => caches[fontface.family] = fontface);
-  const getSrc = (part, href) => {
+  const getSrc = (url, href) => {
     const lastIndex = href.lastIndexOf('/');
-    const path = RE_NET_FILE.test(href) ? href.slice(0, lastIndex + 1) : href;
-    return joinPath(part, path);
+    const base = RE_NET_FILE.test(href) ? href.slice(0, lastIndex + 1) : href;
+    return joinPath(url, base);
   };
   let count = 0;
   [].some.call(styleSheets, ({cssRules, href = defHref}) => [].some.call(cssRules, ({type, style}) => {
@@ -351,7 +356,9 @@ async function collectFonts(fontfaces){
         pushQueue(queues, (resolve) => fontface.loaded.then(resolve, resolve));
     }
   });
-  await Promise.all(queues).then((list) => list.forEach(addFont));
+  await Promise.all(queues).then((list) => list.forEach((fontface) => {
+    fontface.status == 'loaded' && addFont(fontface);
+  }));
   const marks = {};
   return (family) => {
     const fonts = [];
