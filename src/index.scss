@@ -33,10 +33,10 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 }
 
 .test-fontface{
-  font-family: 'Source Han Sans CN'; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; text-align: center;
+  font-size: 2.4vw; line-height: 1.2; font-family: 'Source Han Sans CN'; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; text-align: center;
 
   &::before, &::after{
-    font-size: 2.4vw; line-height: 1.2; font-family: local, ui-dollar, ui-record, element-ui, ui-doc, Wingdings; flex-basis: 100%;
+    font-family: local, ui-dollar, ui-record, element-ui, ui-doc, Wingdings; flex-basis: 100%;
   }
 
   &::before{
