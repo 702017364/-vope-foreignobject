@@ -2,6 +2,52 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 
 @import '../node_modules/@vope/scss/sass/test.scss';
 
+@font-face{
+  font-family: local;
+  src:
+    local(Helvetica),
+    local(Webdings);
+  unicode-range: U+0-0041;
+}
+
+@font-face{
+  font-family: local;
+  src: local('Source Han Sans CN');
+  font-weight: 600;
+}
+
+@font-face{
+  font-family: ui-dollar;
+  src: url(/static/dollar.woff);
+  unicode-range: U+e7a1;
+}
+
+@font-face{
+  font-family: ui-record;
+  src: url(../static/record.woff);
+}
+
+@font-face{
+  font-family: ui-doc;
+  src: url(https://at.alicdn.com/t/font_137970_p1tpzmomxp9cnmi.ttf?t=1508742924398);
+}
+
+.test-fontface{
+  font-family: 'Source Han Sans CN'; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; text-align: center;
+
+  &::before, &::after{
+    font-size: 2.4vw; line-height: 1.2; font-family: local, ui-dollar, ui-record, element-ui, ui-doc, Wingdings; flex-basis: 100%;
+  }
+
+  &::before{
+    font-weight: 600; content: '思源雅黑';
+  }
+
+  &::after{
+    content: '\41\59\a\e7a1\e637\e7ca\e603';
+  }
+}
+
 .test-video{
   > video{
     position: relative;
