@@ -111,8 +111,22 @@ fetchJSON('static/inputs.json').then((data) => {
 
     append(canvas){
       this.clear();
-      this.dialog.appendChild(canvas);
-      this.cache = canvas;
+      const cache = canvas/* .cloneElement */;
+      const ifr = document.createElement('iframe');
+      ifr.style.cssText = `width: 100%; height: 100%; display: block;`;
+      this.dialog.appendChild(ifr);
+      const doc = ifr.contentDocument;
+      const style = doc.createElement('style');
+      style.textContent = `
+        html{ height: 100%;}
+        body{ height: 100%; padding: 0; margin: 0;}
+        canvas{ max-width: 100%; max-height: 100%; margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-color: #fff;}
+      `;
+      const fragment = doc.createDocumentFragment();
+      fragment.appendChild(style);
+      fragment.appendChild(cache);
+      doc.body.appendChild(fragment);
+      this.cache = ifr;
       this.show();
     }
 
