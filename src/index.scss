@@ -125,7 +125,7 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 
 #Dialog{
   @include mratio(80%);
-  @include mcenter(0, fixed);
+  @include mcenter(po, fixed);
   display: flex; justify-content: center;
 
   > i{
