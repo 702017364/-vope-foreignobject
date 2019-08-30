@@ -7,7 +7,7 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
   src:
     local(Helvetica),
     local(Webdings);
-  unicode-range: U+0-0041;
+  unicode-range: U+0-41;
 }
 
 @font-face{
@@ -18,18 +18,24 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 
 @font-face{
   font-family: ui-dollar;
-  src: url(/static/dollar.woff);
+  src:
+    url('1'),
+    url(/static/dollar.woff);
   unicode-range: U+e7a1;
 }
 
 @font-face{
   font-family: ui-record;
-  src: url(../static/record.woff);
+  src: 
+    url('iconfont.svg') format('svg'),
+    url(../static/record.woff) format('woff');
 }
 
 @font-face{
   font-family: ui-doc;
-  src: url(https://at.alicdn.com/t/font_137970_p1tpzmomxp9cnmi.ttf?t=1508742924398);
+  src:
+    url(../static/batang.ttc),
+    url(https://at.alicdn.com/t/font_137970_p1tpzmomxp9cnmi.ttf?t=1508742924398);
 }
 
 .test-fontface{
@@ -145,5 +151,13 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 .snapshot-mask{
   > :not(#Dialog){
     filter: blur(5px); pointer-events: none;
+  }
+}
+
+.ui-list{
+  li{
+    &::first-letter{
+      color: #000;
+    }
   }
 }

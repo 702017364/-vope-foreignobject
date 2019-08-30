@@ -1,4 +1,4 @@
-const RE_BASE64 = /^data:image/i; //匹配是否为（CSS）内嵌图片格式
+const RE_BASE64_IMAGE = /^data:image/i; //匹配是否为（CSS）内嵌图片格式
 const RE_BASE64_SVG = /^(data:image\/svg\+xml,)(?:\<|\%3C)svg/i; //匹配是否为（CSS）内嵌 svg 格式
 const RE_BROWSER_PREFIX = /^-(?:ms|webkit|moz)-/g; //匹配（CSS）浏览器前缀
 
@@ -86,23 +86,24 @@ const createImage = ({src, width, height, load}) => {
 }
 
 /**
- * 插入一个关于 @fontface 的 style
- * @param {FontFace} fontface 字体对象
- * @param {String} 字体路径
- * @param {String} type 字体类型
- * @param {HTMLElement} parentNode 要插入的父节点
+ * 输出 @font-face
+ * @param {FontFace} fontface 
+ * @param {Array} list
+ * @return {String}
  */
-const appendFontfaceStyle = (fontface, src, type, parentNode) => {
-  const style = document.createElement('style');
-  style.textContent = `@font-face{
+const writeFontfaceStyle = (fontface, list) => {
+  const src = list.map(({method, url, type}) => {
+    const format = type ? `format('${type}')` : '';
+    return `${method}('${url}')${format}`;
+  }).join(',');
+  return src && `@font-face{
     font-family: '${fontface.family}';
-    src: url(${src}) format('${type}');
+    src: ${src};
     font-stretch: ${fontface.stretch};
     font-style: ${fontface.style};
     font-weight: ${fontface.weight};
     unicode-range: ${fontface.unicodeRange};
-  }`;
-  parentNode.appendChild(style);
+  }`; 
 };
 
 const RE_PREUDO = /^:{0,2}([^:]+)$/; //匹配伪类
@@ -140,49 +141,19 @@ const svg2base64 = (content) => {
 };
 
 /**
- * 加载文件并转换为 base64 形式
- * @param {String} src
- * @return {Promise}
+ * 加工 fetch（返回二进制数据）
+ * @param {String} src 
+ * @param {String} method ['blob']
+ * @return {Promise} 
  */
-const fetchFileStream = (src) => {
-  return new Promise((resolve, reject) => {
-    fetch(src)
-      .then((res) => {
-        if(res.status == 200){
-          return res.blob()
-        } else{
-          throw new Error(res.statusText)
-        }
-      }, (e) => {throw e})
-      .then((blob) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onload = resolve;
-      })
-      .catch(reject);
+const fetchMachin2blob = (src) => {
+  return fetch(src).then((res) => {
+    if(res.status == 200){
+      return res.blob();
+    } else{
+      throw new Error(res.statusText);
+    }
   });
-};
-
-const RE_NET = /^(?:https?|ftp)/i; //匹配一个地址是否属于网络协议
-const RE_NET_ROOT = /^\//; //匹配一个地址是否为根路径
-const RE_NET_ORIGIN = /^(?:https?|ftp):\/\/[\w.]+(?:\:\d+)?/ig; //匹配地址中的 origin
-const RE_NET_SPLIT = /[\?#]/; //用于将地址中的 hash 及 search 和前面部分切割开
-
-/**
- * 简单的拼接两个路径
- * @param {String} url 相对地址或者绝对地址
- * @param {String} base 如果URL地址是相对地址则作为相对计算的基础地址
- * @return {String}
- */
-const joinPath = (url, base) => {
-  if(RE_NET.test(url)){
-    return url;
-  } else if(RE_NET_ROOT.test(url)){
-    const matchs = base.match(RE_NET_ORIGIN);
-    return matchs[0] + url;
-  } else{
-    return base.split(RE_NET_SPLIT)[0] + url;
-  }
 };
 
 //拷贝样式时，集合中的属性无需拷贝（对于截图而言，这些属性并不会影响界面显示，反而可能产生无法预知的情况）
@@ -275,7 +246,7 @@ function handleURL8CSSStyle(value){
     let val = execs[1];
     if(val.slice(0, 3) == 'url'){
       const src = val.slice(5, -2);
-      if(!RE_BASE64.test(src)){
+      if(!RE_BASE64_IMAGE.test(src)){
         const queue = this.getImageBase64(src);
         list.push(new Promise((resolve) => {
           queue.then(value => value ? resolve(`url(${value})`) : 'none');
@@ -290,50 +261,109 @@ function handleURL8CSSStyle(value){
   return list;
 }
 
-const RE_FACEFONT_URL = /url\("([^\(\)]+?)"\)(?:\sformat\("([a-z]+?)"\))?/g; //用于从 @fontface src 设置中匹配出当前浏览器使用的值
 const RE_NET_FILE = /\.\w+?$/; //匹配当前路径是否包含了文件名
+const RE_FACEFONT_SRC = /(url|local)\("([^\(\)]+?)"\)(?:\sformat\("([a-z]+?)"\))?/g; //查询 @fontface src 属性设置的信息
+const RE_FACEFONT_BASE64 = /data:(\.+?);base64,([^'"\(\)]+)/;
+const RE_BASE64 = /^data:/i; //匹配是否为 base64
 
 /**
- * 返回要查找到的字体信息集合
+ * 
  * @param {Array} fonts 要查找的字体信息
  * @param {StyleSheetList} styleSheets StyleSheet 列表
  * @param {String} defHref 默认的地址
- * @return {Object}
+ * @return {Promise}
  */
-function queryFontfaces(fonts, styleSheets, defHref){
+function loadFontfaces(fonts, styleSheets, defHref){
   const size = fonts.length;
-  const option = {};
-  if(!size) return option;
+  const options = {};
+  if(!size) return options;
   const caches = {};
-  fonts.forEach((fontface) => caches[fontface.family] = fontface);
-  const getSrc = (url, href) => {
+  fonts.forEach((list) => {
+    const family = list[0].family;
+    caches[family] = list;
+  });
+  const getState = (family) => {
+    const states = options[family] || (options[family] = []);
+    const state = [];
+    const size = states.push(state);
+    return [state, size];
+  };
+  const verifyFont = (url, method = 'url') => {
+    const fontface = new FontFace('font', `${method}(${url})`);
+    return fontface.load();
+  };
+  let queues = [];
+  [].forEach.call(styleSheets, ({cssRules, href}) => {
+    href || (href = defHref);
     const lastIndex = href.lastIndexOf('/');
     const base = RE_NET_FILE.test(href) ? href.slice(0, lastIndex + 1) : href;
-    return joinPath(url, base);
-  };
-  let count = 0;
-  [].some.call(styleSheets, ({cssRules, href = defHref}) => [].some.call(cssRules, ({type, style}) => {
-    if(!style) return;
-    const family = style.getPropertyValue('font-family');
-    if(type != 5 || family in caches ^ 1) return;
-    const src = style.getPropertyValue('src');
-    let execs;
-    while((execs = RE_FACEFONT_URL.exec(src)) != null){
-      const type = execs[2];
-      if(type && COMPAT_FONTFACE[type]){
-        option[family] = {
-          fontface: caches[family],
-          src: getSrc(execs[1], href),
-          type,
-        };
-        count++;
-        RE_FACEFONT_URL.lastIndex = 0;
-        break;
+    queues = [].map.call(cssRules, async ({type, style}) => {
+      if(type != 5 || !style) return;
+      const family = style.getPropertyValue('font-family');
+      const cache =  caches[family];
+      if(!cache) return;
+      const src = style.getPropertyValue('src');
+      let list;
+      let execs;
+      RE_FACEFONT_SRC.lastIndex = 0;
+      while((execs = RE_FACEFONT_SRC.exec(src)) != null){
+        const [$, method, url, type] = execs;
+        //检测指定的类型是否为符合类型
+        if(type && !COMPAT_FONTFACE[type]) continue;
+        if(!list){
+          let size;
+          [list, size] = getState(family);
+          list.fontface = cache[size - 1];
+        }
+        const index = RE_FACEFONT_SRC.lastIndex;
+        try{
+          let value;
+          if(method == 'url'){
+            if(RE_BASE64.test(url)){
+              const matchs = url.match(RE_FACEFONT_BASE64);
+              if(matchs) return;
+              const str = atob(matchs[2]);
+              const length = str.length;
+              const u8 = new Uint8Array(length);
+              for(let i = 0; i < length; i++){
+                u8[i] = str[i];
+              }
+              const blob = new Blob([u8], {
+                type: matchs[1],
+              });
+              const blobUrl = URL.createObjectURL(blob);
+              await verifyFont(blobUrl);
+              URL.revokeObjectURL(blobUrl);
+              value = url;
+            } else{
+              const path = new URL(url, base).href;
+              const blob = await fetchMachin2blob(path);
+              const blobUrl = URL.createObjectURL(blob);
+              await verifyFont(blobUrl);
+              URL.revokeObjectURL(blobUrl);
+              value = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onload = () => resolve(reader.result);
+              });
+            }
+          } else if(method == 'local'){
+            await verifyFont(url, method);
+            value = url;
+          }
+          if(value){
+            list.push({method, url: value, type});
+            break;
+          }
+        } catch(e){
+          console.log(e);
+        } finally{
+          RE_FACEFONT_SRC.lastIndex = index;
+        }
       }
-    }
-    if(count >= size) return true;
-  }));
-  return option;
+    });
+  });
+  return new Promise((resolve) => Promise.all(queues).then(() => resolve(options)));
 }
 
 /**
@@ -346,29 +376,30 @@ function queryFontfaces(fonts, styleSheets, defHref){
 async function collectFonts(fontfaces){
   const caches = {};
   const queues = [];
-  const addFont = (fontface) => caches[fontface.family] = fontface;
-  fontfaces.forEach((fontface) => {
-    switch(fontface.status){
-      case 'loaded':
-        addFont(fontface);
-        break;
-      case 'loading':
-        pushQueue(queues, (resolve) => fontface.loaded.then(resolve, resolve));
-    }
+  let old;
+  let count = 0;
+  fontfaces.forEach((font) => {
+    pushQueue(queues, async (resolve) => {
+      const {
+        family,
+      } = font;
+      old === family ? count++ : (count = 0, old = family);
+      font.status == 'loading' && (font = await font.loaded);
+      const cache = caches[family] || (caches[family] = []);
+      cache[count] = font;
+      resolve();
+    });
   });
-  await Promise.all(queues).then((list) => list.forEach((fontface) => {
-    fontface.status == 'loaded' && addFont(fontface);
-  }));
+  await Promise.all(queues);
   const marks = {};
+  const RE = /,\s?/g;
   return (family) => {
     const fonts = [];
-    family.split(',').forEach(value => {
-      const key = value.trim();
-      const fontface = caches[key];
-      if(fontface && key in queues ^ 1){
-        marks[key] = true;
-        fonts.push(fontface);
-      }
+    family.split(RE).forEach((key) => {
+      const cache = caches[key];
+      if(!cache || marks[key]) return;
+      marks[key] = true;
+      fonts.push(cache);
     });
     return fonts;
   };
@@ -433,31 +464,25 @@ class ForeignObject{
    * 加载服务器字体
    */
   loadFonts(){
-    const {
-      ownerDocument,
-    } = this.element;
-    const opt = queryFontfaces(this.fonts, ownerDocument.styleSheets, ownerDocument.location.href);
-    for(let key in opt){
-      const {
-        fontface,
-        src,
-        type,
-      } = opt[key];
-      pushQueue(this.queues, (resolve) => {
-        fetchFileStream(src)
-          .then((e) => {
-            appendFontfaceStyle(fontface, e.target.result, type, this.clone);
-            resolve();
-          })
-          .catch(() => {
-            if(this.option.ignoreFetchError){
-              resolve();
-            } else{
-              throw new Error(`加载服务器字体 ${src} 错误`);
-            }
-          });
-      });
-    }
+    const doc = this.element.ownerDocument;
+    pushQueue(this.queues, async (resolve) => {
+      const opts = await loadFontfaces(this.fonts, doc.styleSheets, doc.location.href);
+      const caches = [];
+      for(let key in opts){
+        opts[key].forEach((item) => {
+          const {
+            fontface,
+          } = item;
+          if(fontface.status != 'loaded') return;
+          const css = writeFontfaceStyle(fontface, item);
+          caches.push(css);
+        });
+      }
+      const style = document.createElement('style');
+      style.textContent = caches.join('\n');
+      this.clone.prepend(style);
+      resolve();
+    });
   }
 
   /**
@@ -494,7 +519,7 @@ class ForeignObject{
           break;
       }
       if(!cloneNode) return;
-      clone.appendChild(cloneNode);
+      clone.append(cloneNode);
     });
     this.clonePseudoElements(element, clone);
     return clone;
@@ -536,7 +561,7 @@ class ForeignObject{
         }
       case 'img':
         src = element.currentSrc || element.src;
-        if(!RE_BASE64.test(src)){
+        if(!RE_BASE64_IMAGE.test(src)){
           clone.removeAttribute('src');
           this.getImageBase64(src).then(value => value && (clone.src = value));
         } else{
@@ -614,12 +639,12 @@ class ForeignObject{
       const value = this.cloneStyle(element, (key, value) => {
         const style = document.createElement('style');
         style.textContent = `.${uuid}::${pseudo}{${key}: ${value};}`;
-        cloneElement.appendChild(style);
+        cloneElement.append(style);
       }, `::${pseudo}`);
       list.push(`.${uuid}::${pseudo}{${value}}`);
     });
     style.textContent = list.join('');
-    cloneElement.appendChild(style);
+    cloneElement.append(style);
   }
 
   /**
