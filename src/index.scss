@@ -2,6 +2,14 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 
 @import '../node_modules/@vope/scss/sass/test.scss';
 
+.s-opacity-menu1{
+  line-height: f2all(50px); text-align: center;
+
+  &::after{
+    content: '跨域引入的样式表'; color: #fff;
+  }
+}
+
 @font-face{
   font-family: local;
   src:
