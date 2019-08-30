@@ -35,14 +35,14 @@ const createInput = (option = {}) => {
 };
 
 fetchJSON('static/inputs.json').then((data) => {
-  const caches = $f();
+  const caches = [];
   data.forEach((item) => {
     const div = $c('div');
     const input = createInput(item);
-    div.appendChild(input);
-    caches.appendChild(div);
+    div.append(input);
+    caches.push(div);
   });
-  $id('Inputs').appendChild(caches);
+  $id('Inputs').append(...caches);
 });
 
 ((selector) => {
@@ -99,8 +99,8 @@ fetchJSON('static/inputs.json').then((data) => {
       const clone = $c('i');
       clone.title = '关闭';
       clone.addEventListener('click', hideCallback, false);
-      dialog.appendChild(clone);
-      document.body.appendChild(dialog);
+      dialog.append(clone);
+      document.body.append(dialog);
       return dialog;
     }
 
@@ -111,7 +111,7 @@ fetchJSON('static/inputs.json').then((data) => {
 
     append(canvas){
       this.clear();
-      const cache = canvas.cloneElement;
+      const cache = canvas/* .cloneElement */;
       const ifr = document.createElement('iframe');
       ifr.style.cssText = `width: 100%; height: 100%; display: block;`;
       ifr.onload = () => {
@@ -122,12 +122,9 @@ fetchJSON('static/inputs.json').then((data) => {
           body{ height: 100%; padding: 0; margin: 0;}
           canvas{ max-width: 100%; max-height: 100%; margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
         `;
-        const fragment = doc.createDocumentFragment();
-        fragment.appendChild(style);
-        fragment.appendChild(cache);
-        doc.body.appendChild(fragment);
+        doc.body.append(style, cache);
       };
-      this.dialog.appendChild(ifr);
+      this.dialog.append(ifr);
       this.cache = ifr;
       this.show();
     }
@@ -157,6 +154,7 @@ fetchJSON('static/inputs.json').then((data) => {
   node.addEventListener('click', () => {
     if(disabled) return;
     disabled = true;
+    const date = new Date();
     foreignObject(document.querySelector('.test-list'), {
       download: false,
       test: true,
@@ -165,9 +163,10 @@ fetchJSON('static/inputs.json').then((data) => {
       dialog || (dialog = new Dialog());
       dialog.append(canvas);
       disabled = false;
+      console.log('截图花费时间：', new Date() - date);
     });
   }, false);
-  document.body.appendChild(node);
+  document.body.append(node);
 })();
 
 ((cls) => {
@@ -220,6 +219,6 @@ fetchJSON('static/inputs.json').then((data) => {
   document.querySelector('canvas').toBlob((blob) => {
     const img = new Image();
     img.src = URL.createObjectURL(blob);
-    wrap.appendChild(img);
+    wrap.append(img);
   }, 'image/png');
 })('Mask');
