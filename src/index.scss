@@ -2,9 +2,29 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 
 @import '../node_modules/@vope/scss/sass/test.scss';
 
-.s-opacity-menu1{
-  line-height: f2all(50px); text-align: center;
+.pseudo-element{
+  padding: .5em 0; line-height: 1.4; background-color: #cdf;
 
+  > input{
+    width: 100%; padding: .3em .2em; border: 1px solid; display: block; box-sizing: border-box; color: #f00;
+
+    @include mplaceholder(#00f);
+  }
+
+  > span{
+    display: block;
+
+    &::first-letter{
+      font-size: 1.5em;
+    }
+  
+    &::first-line{
+      font-size: 2em;
+    }
+  }
+}
+
+.s-opacity-menu1{
   &::after{
     content: '跨域引入的样式表'; color: #fff;
   }
@@ -159,13 +179,5 @@ $gbasic-path: unquote('../node_modules/@vope/scss/images/');
 .snapshot-mask{
   > :not(#Dialog){
     filter: blur(5px); pointer-events: none;
-  }
-}
-
-.ui-list{
-  li{
-    &::first-letter{
-      color: #000;
-    }
   }
 }
