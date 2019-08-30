@@ -298,7 +298,7 @@ function loadFontfaces(fonts, styleSheets, defHref){
     let cssRules;
     try{
       cssRules = sheet.cssRules;
-    } catch{
+    } catch(e){
       return;
     }
     const href = sheet.href || defHref;
