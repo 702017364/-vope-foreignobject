@@ -293,11 +293,18 @@ function loadFontfaces(fonts, styleSheets, defHref){
     return fontface.load();
   };
   let queues = [];
-  [].forEach.call(styleSheets, ({cssRules, href}) => {
-    href || (href = defHref);
+  [].forEach.call(styleSheets, (sheet) => {
+    if(sheet.disabled) return;
+    let cssRules;
+    try{
+      cssRules = sheet.cssRules;
+    } catch{
+      return;
+    }
+    const href = sheet.href || defHref;
     const lastIndex = href.lastIndexOf('/');
     const base = RE_NET_FILE.test(href) ? href.slice(0, lastIndex + 1) : href;
-    queues = [].map.call(cssRules, async ({type, style}) => {
+    [].push.apply(queues, [].map.call(cssRules, async ({type, style}) => {
       if(type != 5 || !style) return;
       const family = style.getPropertyValue('font-family');
       const cache =  caches[family];
@@ -361,7 +368,7 @@ function loadFontfaces(fonts, styleSheets, defHref){
           RE_FACEFONT_SRC.lastIndex = index;
         }
       }
-    });
+    }));
   });
   return new Promise((resolve) => Promise.all(queues).then(() => resolve(options)));
 }
