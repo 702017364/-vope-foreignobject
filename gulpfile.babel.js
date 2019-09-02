@@ -6,6 +6,7 @@ import minimist from 'minimist';
 import bs from 'browser-sync';
 import gif from 'gulp-if';
 import uglify from './node/uglify';
+import babel from 'gulp-babel';
 
 sass.compiler = NodeSass;
 
@@ -14,6 +15,17 @@ const dev = !minimist(process.argv.slice(2)).production;
 
 const getCompileECMA = (file, dest) => () => gulp
   .src(file)
+  .pipe(babel({
+    babelrc: false,
+    plugins: [
+      [
+        require('@babel/plugin-proposal-class-properties'),
+        {
+          loose: true,
+        },
+      ],
+    ],
+  }))
   .pipe(gif(!dev, uglify()))
   .pipe(gulp.dest(dest));
 
